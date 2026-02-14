@@ -1,0 +1,30 @@
+name: Extract and Cleanup
+
+on:
+  workflow_dispatch:
+
+jobs:
+  extract-and-cleanup:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract ZIP file
+        run: |
+          unzip -o "red1dark-store (2).zip"
+      
+      - name: Delete unnecessary files
+        run: |
+          rm -f LICENSE README.md "logo 1024x1024.png" "logo 915x819.png" templates.zip
+      
+      - name: Commit and push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git commit -m "Extract red1dark-store (2).zip and cleanup files" || echo "No changes to commit"
+          git push
